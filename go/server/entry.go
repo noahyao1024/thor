@@ -3,6 +3,7 @@ package server
 import (
 	"net/http"
 
+	rice "github.com/GeertJohan/go.rice"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,7 +27,8 @@ func listen() *gin.Engine {
 		})
 	})
 
-	r.StaticFS("/html", gin.Dir("html", true))
+	box := rice.MustFindBox("../html")
+	r.StaticFS("/html", http.FileSystem(box.HTTPBox()))
 
 	return r
 }
