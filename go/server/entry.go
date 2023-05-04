@@ -1,6 +1,7 @@
 package server
 
 import (
+	"golib/server/cases"
 	"golib/server/container"
 	"net/http"
 
@@ -28,6 +29,9 @@ func listen() *gin.Engine {
 			"message": "pong",
 		})
 	})
+
+	// All test cases go here.
+	r.GET("/api/case", cases.Wrap)
 
 	r.StaticFS("/html", gin.Dir("html", true))
 
