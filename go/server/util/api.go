@@ -2,8 +2,6 @@ package util
 
 import (
 	"context"
-	"fmt"
-	"log"
 
 	gohttpclient "github.com/bozd4g/go-http-client"
 )
@@ -16,13 +14,14 @@ type APIOption struct {
 }
 
 // Call ...
-func Call(a *APIOption) {
+func Call(a *APIOption) (*gohttpclient.Response, error) {
+
 	client := gohttpclient.New(a.Host)
 
 	response, err := client.Get(a.Ctx, a.URI)
 	if err != nil {
-		log.Fatalf("error: %v", err)
+		return response, err
 	}
 
-	fmt.Println(response)
+	return response, nil
 }
