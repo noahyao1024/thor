@@ -1,6 +1,7 @@
 package server
 
 import (
+	"golib/server/container"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -19,6 +20,8 @@ func Listen(port string) {
 }
 
 func listen() *gin.Engine {
+	container.InitDB()
+
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
