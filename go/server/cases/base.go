@@ -91,7 +91,6 @@ func runCase(c *gin.Context, ca *model.Case) error {
 			if data != assertionData {
 				return fmt.Errorf("expect %s actual %s all %s", assertionData, data, rawResponse.Body())
 			}
-			panic("ss")
 		}
 	}
 
