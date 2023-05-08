@@ -24,14 +24,15 @@ type ReportData struct {
 
 // Case ...
 type Case struct {
-	ID         int       `json:"id,omitempty"`
-	Name       string    `json:"name,omitempty"`
-	ReportID   int       `json:"report_id,omitempty"`
-	Status     string    `json:"status,omitempty"`
-	Data       string    `json:"data,omitempty"`
-	APIs       string    `json:"apis,omitempty"`
-	CreateTime time.Time `json:"create_time,omitempty"`
-	ModifyTime time.Time `json:"modify_time,omitempty"`
+	ID           int       `json:"id,omitempty"`
+	TemplateID   int       `json:"template_id,omitempty"`
+	TemplateName string    `json:"template_name,omitempty"`
+	ReportID     int       `json:"report_id,omitempty"`
+	Status       string    `json:"status,omitempty"`
+	Data         string    `json:"data,omitempty"`
+	APIs         string    `json:"apis,omitempty"`
+	CreateTime   time.Time `json:"create_time,omitempty"`
+	ModifyTime   time.Time `json:"modify_time,omitempty"`
 }
 
 // TableName ...

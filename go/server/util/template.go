@@ -26,24 +26,26 @@ func InitializeCasesByID(name string) []byte {
 		  "id": 123,
 		  "apis": [
 			{
-			  "host": "https://jsonplaceholder.typicode.com",
-			  "uri": "/posts/1"
+			  "host": "http://10.11.1.3",
+			  "uri": "/system/alive",
+			  "assertion_data": "{\"open\":{},\"sems-vr\":{},\"shepherd\":{}}"
 			}
 		  ]
 		}
 	]
 	`
+
 	internalCases := make([]*internalCase, 0)
 	json.Unmarshal([]byte(raw), &internalCases)
 
 	cases := make([]*model.Case, 0)
 	for _, internalCase := range internalCases {
 		ca := &model.Case{
-			ID:       internalCase.ID,
-			Name:     internalCase.Name,
-			ReportID: internalCase.ReportID,
-			Status:   internalCase.Status,
-			Data:     internalCase.Data,
+			TemplateID:   internalCase.ID,
+			TemplateName: internalCase.Name,
+			ReportID:     internalCase.ReportID,
+			Status:       internalCase.Status,
+			Data:         internalCase.Data,
 
 			CreateTime: internalCase.CreateTime,
 			ModifyTime: internalCase.ModifyTime,

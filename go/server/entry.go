@@ -1,6 +1,7 @@
 package server
 
 import (
+	ca "golib/server/cases"
 	"golib/server/container"
 	"golib/server/report"
 	"net/http"
@@ -34,6 +35,8 @@ func listen() *gin.Engine {
 	r.GET("/api/report/:id", report.Detail)
 	r.GET("/api/report", report.List)
 	r.POST("/api/report", report.Create)
+
+	r.POST("/api/case/execute/:report_id", ca.BatchRun)
 
 	r.StaticFS("/html", gin.Dir("html", true))
 
