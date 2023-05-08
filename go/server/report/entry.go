@@ -20,6 +20,13 @@ func Detail(c *gin.Context) {
 
 	report := &model.Report{}
 	db.Where(&model.Report{}).Where("id = ?", reportID).Find(&report)
+	if report.ID <= 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "ok",
+			"data":    map[string]interface{}{},
+		})
+		return
+	}
 
 	cases := make([]*model.Case, 0)
 	db.Where(&model.Case{}).Where("report_id = ?", reportID).Find(&cases)
