@@ -1,3 +1,4 @@
+# Native Application
 *.iml
 .gradle
 /local.properties
@@ -14,3 +15,6 @@
 .cxx
 local.properties
 app/libs
+
+# Server
+go/crucial.db

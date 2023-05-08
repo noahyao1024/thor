@@ -1,8 +1,8 @@
 package server
 
 import (
-	"golib/server/cases"
 	"golib/server/container"
+	"golib/server/report"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -31,7 +31,8 @@ func listen() *gin.Engine {
 	})
 
 	// All test cases go here.
-	r.GET("/api/case", cases.Wrap)
+	r.GET("/api/reports", report.List)
+	r.POST("/api/reports", report.Create)
 
 	r.StaticFS("/html", gin.Dir("html", true))
 
