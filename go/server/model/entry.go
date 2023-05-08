@@ -7,6 +7,7 @@ type Report struct {
 	ID         int       `json:"id,omitempty"`
 	Name       string    `json:"name,omitempty"`
 	Data       string    `json:"data,omitempty"`
+	Status     string    `json:"status,omitempty"`
 	CreateTime time.Time `json:"create_time,omitempty"`
 	ModifyTime time.Time `json:"modify_time,omitempty"`
 }

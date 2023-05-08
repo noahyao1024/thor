@@ -31,8 +31,9 @@ func listen() *gin.Engine {
 	})
 
 	// All test cases go here.
-	r.GET("/api/reports", report.List)
-	r.POST("/api/reports", report.Create)
+	r.GET("/api/report/:id", report.Detail)
+	r.GET("/api/report", report.List)
+	r.POST("/api/report", report.Create)
 
 	r.StaticFS("/html", gin.Dir("html", true))
 

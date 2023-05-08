@@ -2,6 +2,7 @@ CREATE TABLE IF NOT EXISTS reports (
   id INTEGER PRIMARY KEY AUTOINCREMENT,
   name TEXT NOT NULL,
   data TEXT NULL,
+  status TEXT NULL,
   create_time DATETIME DEFAULT (datetime('now')),
   modify_time DATETIME DEFAULT (datetime('now', 'localtime'))
 );
