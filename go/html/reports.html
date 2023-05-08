@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <link rel="stylesheet" href="bootstrap.min.css" />
+    <title>Comprehensive Test Reports</title>
+  </head>
+  <body>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="#">Thor</a>
+      <button
+        class="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNav"
+        aria-controls="navbarNav"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span class="navbar-toggler-icon"></span>
+      </button>
+    </nav>
+
+    <!-- Main Container -->
+    <div class="container mt-5">
+      <table class="table">
+        <thead>
+          <tr>
+            <th>Report ID</th>
+            <th>Test Name</th>
+            <th>Created On</th>
+            <th>Status</th>
+            <th>Data</th>
+          </tr>
+        </thead>
+      </table>
+    </div>
+
+    <script src="jquery.min.js"></script>
+    <script src="popper.min.js"></script>
+    <script src="bootstrap.min.js"></script>
+    <script>
+      function loadReports() {
+        // make a GET request to the API
+        $.get("http://localhost:9000/api/report", function (data) {
+          let tableBody = "";
+          // loop through the data from the API and create a row for each element
+          data["data"].forEach(function (row) {
+            tableBody += "<tr>";
+            tableBody += "<td>" + row.id + "</td>";
+            tableBody += "<td>" + row.name + "</td>";
+            tableBody += "<td>" + row.create_time + "</td>";
+            if (row.status === "init") {
+              tableBody +=
+                '<td><span class="badge badge-primary" style="font-size: 1.2em; padding: 5px;">' +
+                row.status +
+                "</span></td>";
+            } else if (row.status === "complete") {
+              tableBody +=
+                '<td><span class="badge badge-success" style="font-size: 1.2em; padding: 5px;">' +
+                row.status +
+                "</span></td>";
+            }
+
+            tableBody +=
+              '<td><a href="/html/detail.html?id=' +
+              row.id +
+              '" target="_blank">View Report</a></td>';
+            tableBody += "</tr>";
+          });
+          // append the table to the body of the HTML
+          $("table").append(tableBody);
+        });
+      }
+
+      $(function () {
+        loadReports();
+      });
+    </script>
+  </body>
+</html>
