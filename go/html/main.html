@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title>System Data</title>
+  </head>
+  <body>
+    <p id="system-data"></p>
+    <script>
+      setInterval(function () {
+        fetch("http://localhost:9000/ping")
+          .then((response) => response.text())
+          .then((data) => {
+            let systemData = document.getElementById("system-data");
+            let requestTime = new Date().toLocaleTimeString(); // get the current time
+            systemData.textContent = `${data} Request time: ${requestTime}`; // append the request time to the data
+            systemData.style.fontSize = "16px";
+            systemData.style.fontWeight = "bold";
+            systemData.style.color = "blue";
+            systemData.style.backgroundColor = "lightgray";
+            systemData.style.padding = "10px";
+            systemData.style.borderRadius = "5px";
+          });
+      }, 3000);
+    </script>
+  </body>
+</html>

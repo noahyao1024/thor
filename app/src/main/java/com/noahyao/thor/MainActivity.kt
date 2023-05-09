@@ -14,7 +14,7 @@ class MainActivity : AppCompatActivity() {
 
         var host = "http://localhost"
         val port = "9000"
-        var uri = "fakehtml/reports.html"
+        var uri = "fakehtml/main.html"
 
         Server.listenAtBackground(port)
 
