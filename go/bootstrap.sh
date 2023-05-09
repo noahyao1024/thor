@@ -11,6 +11,17 @@ if ! command -v openssl &>/dev/null; then
     exit
 fi
 
+routes='package server\n
+import (
+	"encoding/base64"\n
+	"golib/fakehtml"\n
+	"net/http"\n
+	"github.com/gin-gonic/gin"\n
+)\n
+
+func stage2(e *gin.Engine) *gin.Engine {
+'
+
 # Loop through each file in the directory
 for file in $dir/*; do
     # Check if the file is a regular file (i.e. not a directory, symbolic link, etc.)
@@ -33,6 +44,9 @@ for file in $dir/*; do
         # Format the contents of the new file using the template
         new_file_content="package fakehtml\n\nfunc $func_name() string {\n\treturn \"$base64_content\"\n}"
 
+        # Append to an existing string
+        routes+="\n\te.GET(\"/fakehtml/${relative_file}\", func(c *gin.Context) {\n\t\tdecodedBytes, _ := base64.StdEncoding.DecodeString(fakehtml.${func_name}())\n\t\tc.Data(http.StatusOK, \"text/html; charset=utf-8\", decodedBytes)\n\t})"
+
         # Write the formatted contents to the new file
         echo -e "$new_file_content" >fakehtml/$func_name.go
 
@@ -40,5 +54,9 @@ for file in $dir/*; do
         echo "Encoded $file to $new_file"
     fi
 done
+
+routes+="\n\treturn e\n}"
+
+echo -e $routes >$PWD/server/entry_generated.go
 
 SQLITE_PATH="/Users/morysky/repos/thor/go" go run main.go
