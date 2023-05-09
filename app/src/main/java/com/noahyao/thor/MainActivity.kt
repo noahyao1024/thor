@@ -13,8 +13,8 @@ class MainActivity : AppCompatActivity() {
 
 
         var host = "http://localhost"
-        val port = "8888"
-        var uri = "ping"
+        val port = "9000"
+        var uri = "fakehtml/reports.html"
 
         Server.listenAtBackground(port)
 

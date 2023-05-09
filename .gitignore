@@ -19,3 +19,4 @@ app/libs
 # Server
 go/crucial.db
 go/fakehtml
+go/server/entry_generated.go

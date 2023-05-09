@@ -47,11 +47,13 @@ for file in $dir/*; do
         # Check the suffix of the file
         suffix="${relative_file##*.}"
         content_type="text/html; charset=utf-8"
-        if [ "$suffix" == "js" ] || [ "$suffix" == "css" ]; then
+        if [ "$suffix" == "js" ]; then
             content_type="application/javascript"
+        elif [ "$suffix" == "css" ]; then
+            content_type="text/css; charset=utf-8"
         fi
 
-        routes+="\n\te.GET(\"/fakehtml/${relative_file}\", func(c *gin.Context) {\n\t\tdecodedBytes, _ := base64.StdEncoding.DecodeString(fakehtml.${func_name}())\n\t\tc.Data(http.StatusOK, \"$content_type\", decodedBytes)\n\t})"
+        routes+="\n\te.Any(\"/fakehtml/${relative_file}\", func(c *gin.Context) {\n\t\tdecodedBytes, _ := base64.StdEncoding.DecodeString(fakehtml.${func_name}())\n\t\tc.Data(http.StatusOK, \"$content_type\", decodedBytes)\n\t})"
 
         # Write the formatted contents to the new file
         echo -e "$new_file_content" >fakehtml/$func_name.go
