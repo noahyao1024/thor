@@ -67,4 +67,4 @@ routes+="\n\treturn e\n}"
 
 echo -e $routes >$PWD/server/entry_generated.go
 
-SQLITE_PATH="/Users/morysky/repos/thor/go" go run main.go
+SQLITE_PATH=$PWD go run main.go
