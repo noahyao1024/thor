@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html>
   <head>
@@ -5,10 +6,18 @@
   </head>
   <body>
     <p id="system-data"></p>
+    <p id="http-status"></p>
     <script>
       setInterval(function () {
-        fetch("http://localhost:9000/ping")
-          .then((response) => response.text())
+        fetch("/ping")
+          .then((response) => {
+            if (!response.ok) {
+              document.getElementById("system-data").textContent = "Error: HTTP request failed";
+            } else {
+              document.getElementById("http-status").textContent = `HTTP status: ${response.status}`;
+              return response.text();
+            }
+          })
           .then((data) => {
             let systemData = document.getElementById("system-data");
             let requestTime = new Date().toLocaleTimeString(); // get the current time
@@ -19,8 +28,12 @@
             systemData.style.backgroundColor = "lightgray";
             systemData.style.padding = "10px";
             systemData.style.borderRadius = "5px";
+          })
+          .catch((error) => {
+            document.getElementById("system-data").textContent = "Error: HTTP request failed";
           });
       }, 3000);
     </script>
   </body>
 </html>
+
