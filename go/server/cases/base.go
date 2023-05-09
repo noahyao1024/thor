@@ -8,6 +8,7 @@ import (
 	"golib/server/model"
 	"golib/server/util"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 	"github.com/tidwall/gjson"
@@ -18,20 +19,7 @@ type caseDescription struct {
 	URI  string `json:"uri,omitempty"`
 }
 
-// Cases ...
-var Cases []caseDescription
-
 func init() {
-	Cases = make([]caseDescription, 0)
-	raw := `
-	[
-		{
-			"host": "https://jsonplaceholder.typicode.com",
-			"uri": "/posts/1"
-		}
-	]
-	`
-	json.Unmarshal([]byte(raw), &Cases)
 }
 
 // BatchRun ...
@@ -41,21 +29,43 @@ func BatchRun(c *gin.Context) {
 	reportID := c.Param("report_id")
 
 	cases := make([]*model.Case, 0)
-	db.Where(&model.Case{}).Where("report_id = ?", reportID).Find(&cases)
+	db.Model(&model.Case{}).Where("report_id = ? AND status != ?", reportID, "success").Find(&cases)
+
+	var (
+		succeedCnt int
+		failedAt   int
+	)
 
 	for _, ca := range cases {
 		err := runCase(c, ca)
 		if err != nil {
-
+			err = db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "failure").Error
+			failedAt = ca.ID
+			break
 		}
 
-		// TODO Check assertion
+		// Update running result
+		err = db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "success").Error
+		if err != nil {
+			err = db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "failure").Error
+			failedAt = ca.ID
+			break
+		}
 
-		// TODO Update running result
+		succeedCnt++
+	}
+
+	if failedAt > 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"message":   "failure",
+			"failed_at": failedAt,
+		})
+		return
 	}
 
 	c.JSON(http.StatusOK, gin.H{
-		"message": "ok",
+		"message":     "ok",
+		"succeed_cnt": succeedCnt,
 	})
 }
 
@@ -70,14 +80,14 @@ func runCase(c *gin.Context, ca *model.Case) error {
 		assertionType, _ := api["assertion_type"]
 		assertionData, _ := api["assertion_data"]
 
+		ctx, _ := context.WithTimeout(context.Background(), 10*time.Second)
 		ao := &util.APIOption{
-			Ctx:  context.Background(),
+			Ctx:  ctx,
 			Host: host,
 			URI:  uri,
 		}
 
 		var data string
-
 		rawResponse, err := util.Call(ao)
 		if err == nil {
 			dataField := "data"

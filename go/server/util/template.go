@@ -7,14 +7,18 @@ import (
 )
 
 type internalCase struct {
-	ID         int           `json:"id,omitempty"`
-	Name       string        `json:"name,omitempty"`
-	ReportID   int           `json:"report_id,omitempty"`
-	Status     string        `json:"status,omitempty"`
-	Data       string        `json:"data,omitempty"`
-	APIs       []interface{} `json:"apis,omitempty"`
-	CreateTime time.Time     `json:"create_time,omitempty"`
-	ModifyTime time.Time     `json:"modify_time,omitempty"`
+	ID       int    `json:"id,omitempty"`
+	Name     string `json:"name,omitempty"`
+	ReportID int    `json:"report_id,omitempty"`
+	Status   string `json:"status,omitempty"`
+	Data     string `json:"data,omitempty"`
+	APIs     []struct {
+		Host          string `json:"host,omitempty"`
+		URI           string `json:"uri,omitempty"`
+		AssertionData string `json:"assertion_data,omitempty"`
+	} `json:"apis,omitempty"`
+	CreateTime time.Time `json:"create_time,omitempty"`
+	ModifyTime time.Time `json:"modify_time,omitempty"`
 }
 
 // InitializeCasesByID ...
