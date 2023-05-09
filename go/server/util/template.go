@@ -13,9 +13,10 @@ type internalCase struct {
 	Status   string `json:"status,omitempty"`
 	Data     string `json:"data,omitempty"`
 	APIs     []struct {
-		Host          string `json:"host,omitempty"`
-		URI           string `json:"uri,omitempty"`
-		AssertionData string `json:"assertion_data,omitempty"`
+		Host             string      `json:"host,omitempty"`
+		URI              string      `json:"uri,omitempty"`
+		RawAssertionData interface{} `json:"raw_assertion_data,omitempty"`
+		AssertionData    string      `json:"assertion_data,omitempty"`
 	} `json:"apis,omitempty"`
 	CreateTime time.Time `json:"create_time,omitempty"`
 	ModifyTime time.Time `json:"modify_time,omitempty"`
@@ -32,10 +33,15 @@ func InitializeCasesByID(name string) []byte {
 			{
 			  "host": "http://10.11.1.3",
 			  "uri": "/system/alive",
-			  "assertion_data": "{\"open\":{},\"sems-vr\":{},\"shepherd\":{}}"
+			  "raw_assertion_data": {
+				"open": {},
+				"sems-vr": {},
+				"shepherd": {}
+			  }
 			}
 		  ]
 		}
+	]
 	]
 	`
 
@@ -53,6 +59,12 @@ func InitializeCasesByID(name string) []byte {
 
 			CreateTime: internalCase.CreateTime,
 			ModifyTime: internalCase.ModifyTime,
+		}
+
+		for idx := range internalCase.APIs {
+			rawAssertionDataBytes, _ := json.Marshal(internalCase.APIs[idx].RawAssertionData)
+			internalCase.APIs[idx].AssertionData = string(rawAssertionDataBytes)
+			internalCase.APIs[idx].RawAssertionData = nil
 		}
 
 		bytesOfAPIs, _ := json.Marshal(internalCase.APIs)

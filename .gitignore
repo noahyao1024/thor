@@ -18,3 +18,4 @@ app/libs
 
 # Server
 go/crucial.db
+go/fakehtml

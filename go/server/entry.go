@@ -1,6 +1,7 @@
 package server
 
 import (
+	"golib/fakehtml"
 	ca "golib/server/cases"
 	"golib/server/container"
 	"golib/server/report"
@@ -39,6 +40,10 @@ func listen() *gin.Engine {
 	r.POST("/api/case/execute/:report_id", ca.BatchRun)
 
 	r.StaticFS("/html", gin.Dir("html", true))
+
+	r.GET("/fakehtml/", func(c *gin.Context) {
+		c.HTML(http.StatusOK, fakehtml.Bootstrapmincssmap, nil)
+	})
 
 	return r
 }
