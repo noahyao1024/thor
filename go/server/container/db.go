@@ -17,6 +17,10 @@ var (
 // InitDB ...
 func InitDB() {
 	sqlLitePath, _ = os.LookupEnv("SQLITE_PATH")
+	if len(sqlLitePath) == 0 {
+		sqlLitePath = "/sdcard/Android/data/com.noahyao.thor"
+	}
+
 	if len(sqlLitePath) > 0 {
 		var err error
 		localDBClient, err = gorm.Open(sqlite.Open(strings.TrimRight(sqlLitePath, "/")+"/crucial.db"), &gorm.Config{})

@@ -3,8 +3,10 @@ package server
 import (
 	ca "golib/server/cases"
 	"golib/server/container"
+	"golib/server/model"
 	"golib/server/report"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -33,6 +35,16 @@ func stage1() *gin.Engine {
 	r := gin.Default()
 	r.GET("/ping", func(c *gin.Context) {
 		db := container.GetLocalDB()
+
+		if db == nil {
+			c.JSON(http.StatusOK, gin.H{
+				"path":    container.GetSQLLitePath(),
+				"message": "pong",
+				"error":   "db is nil",
+			})
+			return
+		}
+
 		err := db.Exec(`CREATE TABLE IF NOT EXISTS reports (
 			id INTEGER PRIMARY KEY AUTOINCREMENT,
 			name TEXT NOT NULL,
@@ -53,10 +65,20 @@ func stage1() *gin.Engine {
 			modify_time DATETIME DEFAULT (datetime('now', 'localtime'))
 		  );
 		  `)
+
+		report := &model.Report{Name: "Hello", Data: "World"}
+		report.Status = "init"
+		report.CreateTime = time.Now()
+		db.Create(&report)
+
+		reports := make([]*model.Report, 0)
+		db.Where(&model.Report{}).Limit(100).Order("id DESC").Find(&reports)
+
 		c.JSON(http.StatusOK, gin.H{
 			"path":    container.GetSQLLitePath(),
 			"message": "pong",
 			"err":     err.Error,
+			"reports": reports,
 		})
 	})
 
