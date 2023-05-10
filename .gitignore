@@ -14,7 +14,7 @@
 .externalNativeBuild
 .cxx
 local.properties
-app/libs
+app/libs/*ar
 
 # Server
 go/crucial.db
