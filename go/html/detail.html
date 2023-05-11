@@ -1,10 +1,11 @@
+
 <!DOCTYPE html>
 <html lang="en">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <link rel="stylesheet" href="bootstrap.min.css" />
-    <title>Comprehensive Test Reports</title>
+    <title>Cases</title>
   </head>
   <body>
     <!-- Navigation Bar -->
@@ -23,34 +24,50 @@
       </button>
     </nav>
 
-    <!-- Main Container -->
     <div class="container mt-5">
-      <div class="row">
-        <div class="col">
-          <h3 class="text-center">Basic Report Data</h3>
- <button class="btn btn-primary mx-3" id="run-button">Run</button>
+      <div class="row justify-content-center">
+        <div class="col-6">
+          <h3 class="text-center">Empty report</h3>
+          <a href="#" class="btn btn-primary btn-lg d-block mx-auto" id="run-button" style="padding: 10px 20px;" onclick="executeReport()">Run</a>
       </div>
-      <div class="row">
+
+
+      <div class="row mt-5">
         <div class="col">
-          <table class="table">
+          <table class="table table-striped">
             <thead>
               <tr>
-                <th>Report ID</th>
-                <th>Test Name</th>
+                <th>Case ID</th>
+                <th>Case Name</th>
                 <th>Created On</th>
                 <th>Status</th>
-                <th>Data</th>
               </tr>
             </thead>
           </table>
         </div>
       </div>
+
     </div>
 
     <script src="jquery.min.js"></script>
     <script src="popper.min.js"></script>
     <script src="bootstrap.min.js"></script>
     <script>
+ 
+
+function executeReport() {
+        // fetch report data from the API
+        const params = new URLSearchParams(window.location.search);
+        const id = params.get("id");
+        const url = new URL(`http://localhost:9000/api/case/execute/${id}`);
+        console.log(url.toString());
+
+        $.post(url.toString(), function (data) {
+        });
+}
+
+
+
       $(function () {
         // fetch report data from the API
         const params = new URLSearchParams(window.location.search);
@@ -59,6 +76,27 @@
         console.log(url.toString());
 
         $.get(url.toString(), function (data) {
+       
+
+          console.log( data["data"]["cases"] )
+
+
+
+if (!data["data"]["cases"] || data["data"]["cases"].length === 0) {
+
+  $("h3.text-center").text("No cases available");
+  $("table").empty();
+  $("#run-button").prop("disabled", true);
+  return;
+
+
+}
+
+
+     
+     
+
+
           // create table rows dynamically for each report
           const tableBody = data["data"]["cases"].reduce((acc, row) => {
             let statusBadge = "";
@@ -72,26 +110,43 @@
                 '<span class="badge badge-success" style="font-size: 1.2em; padding: 5px;">' +
                 row.status +
                 "</span>";
+            } else if (row.status === "failure") {
+              statusBadge =
+                '<span class="badge badge-danger" style="font-size: 1.2em; padding: 5px;">' +
+                row.status +
+                "</span>";
             }
+
 
             let report = data["data"]["report"];
             // Update Basic Report Data div above
             $("h3.text-center").text(report.name);
 
-            acc += `<tr>
-                      <td>${row.id}</td>
-                      <td>${row.name}</td>
-                      <td>${row.create_time}</td>
-                      <td>${statusBadge}</td>
-                      <td><a href="/html/detail.html?id=${row.id}" target="_blank">View Report</a></td>
-                    </tr>`;
+            if (data["data"]["cases"].length > 0) {
+              acc += `<tr>
+                        <td>${row.id}</td>
+                        <td>${row.template_name}</td>
+                        <td>${row.create_time}</td>
+                        <td>${statusBadge}</td>
+                      </tr>`;
+            } else {
+              acc += `<tr>
+                        <td colspan="5" class="text-center">No data available</td>
+                      </tr>`;
+            }
             return acc;
           }, "");
 
-          // add table rows to HTML table
-          $("table").append(tableBody);
+        
+
+          // add table rows to HTML table if tableBody is not empty
+
+            $("table").append(tableBody);
+         
+
         });
       });
     </script>
   </body>
 </html>
+

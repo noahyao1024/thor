@@ -63,7 +63,10 @@ curl 'localhost:9000/api/reports' -H 'Content-Type: application/json' -d '{
 func Create(c *gin.Context) {
 	report := &model.Report{}
 	if err := c.ShouldBindJSON(&report); err != nil {
-		fmt.Println(err)
+		c.JSON(http.StatusOK, gin.H{
+			"message": "error",
+			"error":   err.Error(),
+		})
 		return
 	}
 
@@ -90,6 +93,7 @@ func Create(c *gin.Context) {
 	db.Create(&cases)
 
 	c.JSON(http.StatusOK, gin.H{
+		"id":      report.ID,
 		"message": "ok",
 	})
 	return

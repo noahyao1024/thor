@@ -42,7 +42,6 @@ func InitializeCasesByID(name string) []byte {
 		  ]
 		}
 	]
-	]
 	`
 
 	internalCases := make([]*internalCase, 0)

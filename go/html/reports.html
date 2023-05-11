@@ -7,7 +7,7 @@
       content="width=device-width, initial-scale=1, shrink-to-fit=no"
     />
     <link rel="stylesheet" href="bootstrap.min.css" />
-    <title>Comprehensive Test Reports</title>
+    <title>Test Reports</title>
   </head>
   <body>
     <!-- Navigation Bar -->
@@ -28,6 +28,43 @@
 
     <!-- Main Container -->
     <div class="container mt-5">
+      <div class="d-flex justify-content-center mb-3">
+        <button type="button" class="btn btn-lg btn-primary" data-toggle="modal" data-target="#createReportModal">Create Report</button>
+      </div>
+      <div class="modal fade" id="createReportModal" tabindex="-1" role="dialog" aria-labelledby="createReportModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h5 class="modal-title" id="createReportModalLabel">Create Report</h5>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <form>
+              <div class="modal-body">
+                <div class="form-group">
+                  <label for="name">Name:</label>
+                  <input type="text" class="form-control" id="name">
+                </div>
+                <div class="form-group">
+                  <label for="sn">SN:</label>
+                  <input type="text" class="form-control" id="sn">
+                </div>
+                <div class="form-group">
+                  <label for="others">Others:</label>
+                  <input type="text" class="form-control" id="others">
+                </div>
+              </div>
+
+            <div class="modal-footer">
+              <button type="button" class="btn btn-secondary" data-dismiss="modal">Cancel</button>
+              <button type="button" class="btn btn-primary" onclick="createReport(document.getElementById('name').value, document.getElementById('sn').value, document.getElementById('others').value)">Create</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+
       <table class="table">
         <thead>
           <tr>
@@ -54,8 +91,11 @@
             tableBody += "<tr>";
             tableBody += "<td>" + row.id + "</td>";
             tableBody += "<td>" + row.name + "</td>";
-            tableBody += "<td>" + row.create_time + "</td>";
+            const createTime = new Date(row.create_time);
+            const formattedTime = createTime.toLocaleString();
+            tableBody += "<td>" + formattedTime + "</td>";
             if (row.status === "init") {
+
               tableBody +=
                 '<td><span class="badge badge-primary" style="font-size: 1.2em; padding: 5px;">' +
                 row.status +
@@ -78,9 +118,40 @@
         });
       }
 
+      function createReport(name, sn, others) {
+        
+        // check sn format, it must start with PH and without lower letters
+        if (!/^PH[^\p{Ll}]+$/.test(sn)) {
+          alert("Invalid SN format. SN must start with PH and not contain lower letters.");
+          return;
+        }
+
+
+        // pack sn to a new field called data
+        const data = {name: name, data: JSON.stringify({SN: sn, others: others})};
+        // make a POST request to the API
+        $.ajax({
+          url: "http://localhost:9000/api/report",
+          type: "POST",
+          data: JSON.stringify(data),
+          contentType: "application/json; charset=utf-8",
+          dataType: "json",
+          success: function (data) {
+            alert("Response: " + JSON.stringify(data));
+          },
+          error: function (xhr, status, error) {
+            alert("Error: " + error);
+          },
+        });
+      }
+
+
+
+
       $(function () {
         loadReports();
       });
     </script>
   </body>
 </html>
+
