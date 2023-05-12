@@ -54,10 +54,12 @@ func BatchRun(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message":   "failure",
 			"failed_at": failedAt,
-			"error":     err,
+			"error":     err.Error(),
 		})
 		return
 	}
+
+	db.Model(&model.Report{}).Where("id = ?", reportID).Update("status", "success")
 
 	c.JSON(http.StatusOK, gin.H{
 		"message":     "ok",
@@ -86,10 +88,10 @@ func runCase(c *gin.Context, ca *model.Case) error {
 		var data string
 		rawResponse, err := util.Call(ao)
 		if err != nil {
+			return err
+		} else {
 			dataField := "data"
 			data = gjson.GetBytes(rawResponse.Body(), dataField).String()
-		} else {
-			return err
 		}
 
 		switch assertionType {

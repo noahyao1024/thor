@@ -16,7 +16,15 @@
       aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
       <span class="navbar-toggler-icon"></span>
     </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+      <ul class="navbar-nav">
+        <li class="nav-item">
+          <a class="nav-link" href="/fakehtml/reports.html">Report</a>
+        </li>
+      </ul>
+    </div>
   </nav>
+
 
   </div>
   <div class="container mt-5">
@@ -53,6 +61,8 @@
 
 
     function executeReport() {
+
+
       // fetch report data from the API
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
@@ -60,7 +70,13 @@
       console.log(url.toString());
 
       $.post(url.toString(), function (data) {
+        if (data.failed_at === undefined) {
+          alert("成功Case数目: " + data.succeed_cnt);
+        } else {
+          alert("失败在第【" + data.failed_at + "】个Case, " + "错误信息: " + data.error);
+        }
       });
+
     }
 
 

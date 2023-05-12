@@ -27,8 +27,8 @@ func InitializeCasesByID(name string) []byte {
 	raw := `
 	[
 		{
-		  "name": "1-123",
-		  "id": 123,
+		  "name": "健康检查",
+		  "id": 1,
 		  "apis": [
 			{
 			  "host": "http://10.11.1.3",
