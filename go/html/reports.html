@@ -131,8 +131,9 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
-          window.location.href = "/html/detail.html?id=" + data.id;
+          window.open("/html/detail.html?id=" + data.id, "_self");
         },
+
         error: function (xhr, status, error) {
           alert("Error: " + error);
         },
