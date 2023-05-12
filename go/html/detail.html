@@ -66,7 +66,7 @@
       // fetch report data from the API
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
-      const url = new URL(`http://localhost:9000/api/case/execute/${id}`);
+      const url = new URL(`/api/case/execute/${id}`);
       console.log(url.toString());
 
       $.post(url.toString(), function (data) {
@@ -85,7 +85,7 @@
       // fetch report data from the API
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
-      const url = new URL(`http://localhost:9000/api/report/${id}`);
+      const url = new URL(`/api/report/${id}`);
       console.log(url.toString());
 
       $.get(url.toString(), function (data) {

@@ -14,10 +14,9 @@ class MainActivity : AppCompatActivity() {
 
         var host = "http://localhost"
         val port = "9000"
-        var uri = "fakehtml/main.html"
+        var uri = "fakehtml/reports.html"
         requestPermissions(arrayOf("android.permission.WRITE_EXTERNAL_STORAGE"), 100)
         Server.listenAtBackground(port)
-
 
         // Load WebView
         val webView = findViewById<WebView>(R.id.webView)

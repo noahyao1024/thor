@@ -79,7 +79,7 @@
   <script>
     function loadReports() {
       // make a GET request to the API
-      $.get("http://localhost:9000/api/report", function (data) {
+      $.get("/api/report", function (data) {
         let tableBody = "";
         // loop through the data from the API and create a row for each element
         data["data"].forEach(function (row) {
@@ -125,7 +125,7 @@
       const data = { name: name, data: JSON.stringify({ SN: sn, others: others }) };
       // make a POST request to the API
       $.ajax({
-        url: "http://localhost:9000/api/report",
+        url: "/api/report",
         type: "POST",
         data: JSON.stringify(data),
         contentType: "application/json; charset=utf-8",
