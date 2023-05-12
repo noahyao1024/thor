@@ -32,7 +32,7 @@
       <div class="col-6">
         <h3 class="text-center">Empty report</h3>
         <a href="#" class="btn btn-primary btn-lg d-block mx-auto" id="run-button" style="padding: 10px 20px;"
-          onclick="executeReport()">Run</a>
+          onclick="executeReport()">Continue</a>
       </div>
     </div>
   </div>
@@ -66,8 +66,7 @@
       // fetch report data from the API
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
-      const url = new URL(`/api/case/execute/${id}`);
-      console.log(url.toString());
+      const url = `/api/case/execute/${id}`;
 
       $.post(url.toString(), function (data) {
         if (data.failed_at === undefined) {
@@ -85,8 +84,7 @@
       // fetch report data from the API
       const params = new URLSearchParams(window.location.search);
       const id = params.get("id");
-      const url = new URL(`/api/report/${id}`);
-      console.log(url.toString());
+      const url = `/api/report/${id}`;
 
       $.get(url.toString(), function (data) {
 
