@@ -1,152 +1,166 @@
-
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <link rel="stylesheet" href="bootstrap.min.css" />
-    <title>Cases</title>
-  </head>
-  <body>
-    <!-- Navigation Bar -->
-    <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="#">Thor</a>
-      <button
-        class="navbar-toggler"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
-      >
-        <span class="navbar-toggler-icon"></span>
-      </button>
-    </nav>
 
-    <div class="container mt-5">
-      <div class="row justify-content-center">
-        <div class="col-6">
-          <h3 class="text-center">Empty report</h3>
-          <a href="#" class="btn btn-primary btn-lg d-block mx-auto" id="run-button" style="padding: 10px 20px;" onclick="executeReport()">Run</a>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="stylesheet" href="bootstrap.min.css" />
+  <title>Cases</title>
+</head>
+
+<body>
+  <!-- Navigation Bar -->
+  <nav class="navbar navbar-expand-lg navbar-light bg-light">
+    <a class="navbar-brand" href="#">Thor</a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
+      aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+  </nav>
+
+  </div>
+  <div class="container mt-5">
+    <div class="row justify-content-center">
+      <div class="col-6">
+        <h3 class="text-center">Empty report</h3>
+        <a href="#" class="btn btn-primary btn-lg d-block mx-auto" id="run-button" style="padding: 10px 20px;"
+          onclick="executeReport()">Run</a>
       </div>
-
-
-      <div class="row mt-5">
-        <div class="col">
-          <table class="table table-striped">
-            <thead>
-              <tr>
-                <th>Case ID</th>
-                <th>Case Name</th>
-                <th>Created On</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-          </table>
-        </div>
-      </div>
-
     </div>
-
-    <script src="jquery.min.js"></script>
-    <script src="popper.min.js"></script>
-    <script src="bootstrap.min.js"></script>
-    <script>
- 
-
-function executeReport() {
-        // fetch report data from the API
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get("id");
-        const url = new URL(`http://localhost:9000/api/case/execute/${id}`);
-        console.log(url.toString());
-
-        $.post(url.toString(), function (data) {
-        });
-}
-
-
-
-      $(function () {
-        // fetch report data from the API
-        const params = new URLSearchParams(window.location.search);
-        const id = params.get("id");
-        const url = new URL(`http://localhost:9000/api/report/${id}`);
-        console.log(url.toString());
-
-        $.get(url.toString(), function (data) {
-       
-
-          console.log( data["data"]["cases"] )
+  </div>
+  <div class="container mt-5">
+    <div class="row mt-5">
+      <div class="col">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Case ID</th>
+              <th>Case Name</th>
+              <th>Created On</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+        </table>
+      </div>
+    </div>
+  </div>
 
 
-
-if (!data["data"]["cases"] || data["data"]["cases"].length === 0) {
-
-  $("h3.text-center").text("No cases available");
-  $("table").empty();
-  $("#run-button").prop("disabled", true);
-  return;
+  <script src="jquery.min.js"></script>
+  <script src="popper.min.js"></script>
+  <script src="bootstrap.min.js"></script>
+  <script>
 
 
-}
+    function executeReport() {
+      // fetch report data from the API
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      const url = new URL(`http://localhost:9000/api/case/execute/${id}`);
+      console.log(url.toString());
+
+      $.post(url.toString(), function (data) {
+      });
+    }
 
 
-     
-     
+
+    $(function () {
+      // fetch report data from the API
+      const params = new URLSearchParams(window.location.search);
+      const id = params.get("id");
+      const url = new URL(`http://localhost:9000/api/report/${id}`);
+      console.log(url.toString());
+
+      $.get(url.toString(), function (data) {
 
 
-          // create table rows dynamically for each report
-          const tableBody = data["data"]["cases"].reduce((acc, row) => {
-            let statusBadge = "";
-            if (row.status === "init") {
-              statusBadge =
-                '<span class="badge badge-primary" style="font-size: 1.2em; padding: 5px;">' +
-                row.status +
-                "</span>";
-            } else if (row.status === "complete") {
-              statusBadge =
-                '<span class="badge badge-success" style="font-size: 1.2em; padding: 5px;">' +
-                row.status +
-                "</span>";
-            } else if (row.status === "failure") {
-              statusBadge =
-                '<span class="badge badge-danger" style="font-size: 1.2em; padding: 5px;">' +
-                row.status +
-                "</span>";
-            }
+        console.log(data["data"]["cases"])
 
 
-            let report = data["data"]["report"];
-            // Update Basic Report Data div above
-            $("h3.text-center").text(report.name);
 
-            if (data["data"]["cases"].length > 0) {
-              acc += `<tr>
+        if (!data["data"]["cases"] || data["data"]["cases"].length === 0) {
+
+          $("h3.text-center").text("No cases available");
+          $("table").empty();
+
+
+
+
+          $("#run-button").prop("disabled", true);
+
+
+
+
+
+
+          return;
+        }
+
+
+
+        // create table rows dynamically for each report
+        const tableBody = data["data"]["cases"].reduce((acc, row) => {
+          let statusBadge = "";
+          if (row.status === "init") {
+            statusBadge =
+              '<span class="badge badge-primary" style="font-size: 1.2em; padding: 5px;">' +
+              row.status +
+              "</span>";
+          } else if (row.status === "success") {
+            statusBadge =
+              '<span class="badge badge-success" style="font-size: 1.2em; padding: 5px;">' +
+              row.status +
+              "</span>";
+          } else if (row.status === "failure") {
+            statusBadge =
+              '<span class="badge badge-danger" style="font-size: 1.2em; padding: 5px;">' +
+              row.status +
+              "</span>";
+          }
+
+
+          let date = new Date(row.create_time);
+          let formattedDate = date.toLocaleString();
+
+
+          let report = data["data"]["report"];
+          let reportData = JSON.parse(report.data);
+
+          // Update Basic Report Data div above
+          $("h3.text-center").text("Name:" + report.name + " | " + "SN: " + reportData.SN);
+
+
+
+
+          console.log(reportData.SN);
+
+
+          if (data["data"]["cases"].length > 0) {
+            acc += `<tr>
                         <td>${row.id}</td>
                         <td>${row.template_name}</td>
-                        <td>${row.create_time}</td>
+                        <td>${formattedDate}</td>
                         <td>${statusBadge}</td>
                       </tr>`;
-            } else {
-              acc += `<tr>
+          } else {
+            acc += `<tr>
                         <td colspan="5" class="text-center">No data available</td>
                       </tr>`;
-            }
-            return acc;
-          }, "");
+          }
+          return acc;
+        }, "");
 
-        
 
-          // add table rows to HTML table if tableBody is not empty
 
-            $("table").append(tableBody);
-         
+        // add table rows to HTML table if tableBody is not empty
 
-        });
+        $("table").append(tableBody);
+
+
       });
-    </script>
-  </body>
-</html>
+    });
+  </script>
+</body>
 
+</html>

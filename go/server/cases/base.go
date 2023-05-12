@@ -32,26 +32,21 @@ func BatchRun(c *gin.Context) {
 	db.Model(&model.Case{}).Where("report_id = ? AND status != ?", reportID, "success").Find(&cases)
 
 	var (
+		err        error
 		succeedCnt int
 		failedAt   int
 	)
 
 	for _, ca := range cases {
-		err := runCase(c, ca)
+		err = runCase(c, ca)
 		if err != nil {
-			err = db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "failure").Error
+			db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "failure")
 			failedAt = ca.ID
 			break
 		}
 
 		// Update running result
-		err = db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "success").Error
-		if err != nil {
-			err = db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "failure").Error
-			failedAt = ca.ID
-			break
-		}
-
+		db.Model(&model.Case{}).Where("id = ?", ca.ID).Update("status", "success")
 		succeedCnt++
 	}
 
@@ -59,6 +54,7 @@ func BatchRun(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{
 			"message":   "failure",
 			"failed_at": failedAt,
+			"error":     err,
 		})
 		return
 	}
@@ -89,7 +85,7 @@ func runCase(c *gin.Context, ca *model.Case) error {
 
 		var data string
 		rawResponse, err := util.Call(ao)
-		if err == nil {
+		if err != nil {
 			dataField := "data"
 			data = gjson.GetBytes(rawResponse.Body(), dataField).String()
 		} else {
