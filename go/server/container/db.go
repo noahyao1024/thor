@@ -18,7 +18,9 @@ var (
 func InitDB() {
 	sqlLitePath, _ = os.LookupEnv("SQLITE_PATH")
 	if len(sqlLitePath) == 0 {
+		// FIXME
 		sqlLitePath = "/sdcard/Android/data/com.noahyao.thor"
+		sqlLitePath = "./data/data/com.noahyao.thor"
 	}
 
 	if len(sqlLitePath) > 0 {
