@@ -103,7 +103,7 @@
           }
 
           tableBody +=
-            '<td><a href="/html/detail.html?id=' +
+            '<td><a href="/fakehtml/detail.html?id=' +
             row.id +
             '" target="_blank">View Report</a></td>';
           tableBody += "</tr>";
@@ -131,7 +131,7 @@
         contentType: "application/json; charset=utf-8",
         dataType: "json",
         success: function (data) {
-          window.open("/html/detail.html?id=" + data.id, "_self");
+          window.open("/fakehtml/detail.html?id=" + data.id, "_self");
         },
 
         error: function (xhr, status, error) {
