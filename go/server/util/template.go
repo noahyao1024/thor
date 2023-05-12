@@ -22,6 +22,8 @@ type internalCase struct {
 	ModifyTime time.Time `json:"modify_time,omitempty"`
 }
 
+var rawCases = ``
+
 // InitializeCasesByID ...
 func InitializeCasesByID(name string) []byte {
 	raw := `
@@ -43,6 +45,10 @@ func InitializeCasesByID(name string) []byte {
 		}
 	]
 	`
+
+	if rawCases != "" {
+		raw = rawCases
+	}
 
 	internalCases := make([]*internalCase, 0)
 	json.Unmarshal([]byte(raw), &internalCases)

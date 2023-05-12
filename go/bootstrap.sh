@@ -65,6 +65,19 @@ done
 
 routes+="\n\treturn e\n}"
 
+ 
+# Read file $PWD/cases-v0.0.1.json
+cases=$(cat $PWD/cases-v0.0.1.json)
+# Build string using template
+template="package util\n\nfunc init() {\n\nrawCases = \`$cases\`\n}"
+echo -e "$template" > $PWD/server/util/cases.go
+
+
+
+
 echo -e $routes >$PWD/server/entry_generated.go
+
+
+
 
 SQLITE_PATH=$PWD go run main.go

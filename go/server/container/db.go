@@ -30,7 +30,8 @@ func InitDB() {
 			panic(fmt.Sprintf("%s - %s", strings.TrimRight(sqlLitePath, "/")+"/crucial.db", err.Error()))
 		}
 
-		localDBClient.Exec(`CREATE TABLE IF NOT EXISTS reports (
+		localDBClient.Exec(`
+		CREATE TABLE IF NOT EXISTS reports (
 				id INTEGER PRIMARY KEY AUTOINCREMENT,
 				name TEXT NOT NULL,
 				data TEXT NULL,
@@ -49,6 +50,7 @@ func InitDB() {
 				create_time DATETIME DEFAULT (datetime('now')),
 				modify_time DATETIME DEFAULT (datetime('now', 'localtime'))
 			  );
+
 			  `)
 	}
 }

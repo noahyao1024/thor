@@ -20,3 +20,4 @@ app/libs/*ar
 go/crucial.db
 go/fakehtml
 go/server/entry_generated.go
+go/server/util/cases.go
